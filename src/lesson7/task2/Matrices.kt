@@ -4,7 +4,6 @@ package lesson7.task2
 
 import lesson7.task1.Matrix
 import lesson7.task1.createMatrix
-import lesson7.task1.Cell
 
 // Все задачи в этом файле требуют наличия реализации интерфейса "Матрица" в Matrix.kt
 
@@ -61,7 +60,44 @@ operator fun Matrix<Int>.plus(other: Matrix<Int>): Matrix<Int> {
  * 10 11 12  5
  *  9  8  7  6
  */
-fun generateSpiral(height: Int, width: Int): Matrix<Int> = TODO()
+fun generateSpiral(height: Int, width: Int): Matrix<Int> {
+    var matrix = createMatrix(height, width, 1)
+    var count = 0
+    var minWidth = 0
+    var maxWidth = width - 1
+    var minHeight = 0
+    var maxHeight = height - 1
+    while (count < height * width) {
+        for (i in minWidth..maxWidth) {
+            count++
+            matrix[minHeight, i] = count
+        }
+        minHeight++
+
+        if (count < height * width)
+            for (i in minHeight..maxHeight) {
+                count++
+                matrix[i, maxWidth] = count
+            }
+        maxWidth--
+
+        if (count < height * width)
+            for (i in maxWidth downTo minWidth) {
+                count++
+                matrix[maxHeight, i] = count
+            }
+        maxHeight--
+
+        if (count < height * width)
+            for (i in maxHeight downTo minHeight) {
+                count++
+                matrix[i, minWidth] = count
+            }
+        minWidth++
+
+    }
+    return matrix
+}
 
 /**
  * Сложная
@@ -77,56 +113,9 @@ fun generateSpiral(height: Int, width: Int): Matrix<Int> = TODO()
  *  1  2  2  2  2  1
  *  1  1  1  1  1  1
  */
-enum class Direction {
-    UP, LEFT, DOWN, RIGHT
-}
 
-fun turn(streamline: Direction): Direction {
-    return when (streamline) {
-        Direction.UP -> Direction.RIGHT
-        Direction.RIGHT -> Direction.DOWN
-        Direction.DOWN -> Direction.LEFT
-        else -> Direction.UP
-    }
-}
 
-fun edge(height: Int, width: Int, streamline: Direction): Cell {
-    return when (streamline) {
-        Direction.RIGHT -> Cell(height, width + 1)
-        Direction.DOWN -> Cell(height + 1, width)
-        Direction.LEFT -> Cell(height, width - 1)
-        else -> Cell(height - 1, width)
-    }
-
-}
-
-fun generateRectangles(height: Int, width: Int): Matrix<Int> {
-    var matrix = createMatrix(height, width, 0)
-    var streamline = Direction.RIGHT
-    var road = 0
-    var n = 1
-    var cell = Cell(0, 0)
-    while (road < height * width - 1) {
-        if ((edge(cell.row, cell.column, streamline).row !in 0..height - 1) ||
-                (edge(cell.row, cell.column, streamline).column !in 0..width - 1) ||
-                (matrix[edge(cell.row, cell.column, streamline)] != 0)) {
-            streamline = turn(streamline)
-            if (streamline == Direction.RIGHT) {
-                matrix[cell] = n
-                road++
-                cell = edge(cell.row, cell.column, streamline)
-                n++
-            }
-        } else {
-            matrix[cell] = n
-            road++
-            cell = edge(cell.row, cell.column, streamline)
-        }
-    }
-    matrix[cell] = n
-    return matrix
-
-}
+fun generateRectangles(height: Int, width: Int): Matrix<Int> = TODO()
 
 /**
  * Сложная

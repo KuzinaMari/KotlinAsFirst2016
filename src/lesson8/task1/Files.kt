@@ -54,9 +54,18 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  *
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
-    TODO()
+    val lowerCase = File(inputName).readText().toLowerCase()
+    var result = mutableMapOf<String, Int>()
+    for (i in 0..substrings.size - 1) {
+        var count = 0
+        for (c in 0..lowerCase.length - substrings[i].length) {
+            if (lowerCase.substring(c, c + substrings[i].length) == substrings[i].toLowerCase())
+                count++
+        }
+        result[substrings[i]] = count
+    }
+    return result
 }
-
 
 /**
  * Средняя
@@ -72,18 +81,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  *
  */
 fun sibilants(inputName: String, outputName: String) {
-    val outputStream = File(outputName).bufferedWriter()
-    val map = mapOf<String, String>("Ы" to "И", "ы" to "и", "Я" to "А", "я" to "а", "Ю" to "У", "ю" to "у")
-    for (line in File(inputName).readLines())
-        if (line.length <= 1) outputStream.write("$line\n") else {
-            outputStream.write(line[0].toString())
-            for (char in 1..line.length - 1)
-                if ((line[char] in "ЫЯЮыяю") && (line[char - 1] in "ЖЧШЩжчшщ"))
-                    outputStream.write(map[line[char].toString()])
-                else outputStream.write(line[char].toString())
-            outputStream.write("\n")
-        }
-    outputStream.close()
+    TODO()
 }
 
 
